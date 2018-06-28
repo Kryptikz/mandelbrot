@@ -35,8 +35,6 @@ public class Initialize {
             top-=vertDist/(2*zoom);
             bottom+=vertDist/(2*zoom);
         //}
-        
-        
         //double left=-1;
         //double right=0;
         //double top=1.25;
@@ -59,7 +57,7 @@ public class Initialize {
             }
             b=left;
             a-=vertInc;
-            System.out.println((double)r/(double)HEIGHT*100);
+            System.out.println((((double)((int)(((double)r/(double)HEIGHT*100)*100)))/100) + "% complete with frame generation");
         }
         d.setPoints(points);
         d.setVisible(true);
@@ -75,6 +73,7 @@ public class Initialize {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        boolean s = true;
         for(double[] du : points) {
             try {
                 out.setRGB((int)du[0], (int)du[1], (d.getIterationColor((int)du[2])).getRGB());
@@ -85,17 +84,22 @@ public class Initialize {
                 bw.newLine();
                 bw.flush();
             } catch (Exception e) {
+                s=false;
+                System.out.println("recoverable instance of raw data write failed with error:");
                 e.printStackTrace();
             }
+        }
+        if (s) {
+            System.out.println("raw data write completed successfully");
         }
         File output = new File("mandlebrot_render.png");
         try {
             ImageIO.write(out,"png",output);
+            System.out.println("image write completed successfully");
         } catch (Exception e) {
+            System.out.println("image write failed with error:");
             e.printStackTrace();
         }
-        
-        
         //}
     }
 }
