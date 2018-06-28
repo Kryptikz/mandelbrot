@@ -8,23 +8,39 @@ public class Initialize {
     public static void main(String[] args) {
         JFrame frame = new JFrame("window");
         int HEIGHT = 1080;
-        int WIDTH = 1920    ;
+        int WIDTH = 1920;
         frame.setSize(WIDTH, HEIGHT);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Display d = new Display();
         //frame.add(d);
         //d.setVisible(true);
-        int ITERATIONS = 100; 
+        int ITERATIONS = 10000; 
         Display d = new Display(ITERATIONS);
         frame.add(d);
         d.setVisible(true);
         frame.repaint();
         frame.revalidate();
-        double left=-2;
-        double right=2;
-        double top=1;
-        double bottom=-1;        
+        double[] center = new double[]{-.7463,.1102};
+        double zoom = 2;
+        double left = -2+center[0];
+        double right = 1+center[0];
+        double top = 1+center[1];
+        double bottom = -1+center[1];
+        //for(int i=1;i<zoom;i++) {
+            double horzDist = right-left;
+            double vertDist = top-bottom;
+            left+=horzDist/(2*zoom);
+            right-=horzDist/(2*zoom);
+            top-=vertDist/(2*zoom);
+            bottom+=vertDist/(2*zoom);
+        //}
+        
+        
+        //double left=-1;
+        //double right=0;
+        //double top=1.25;
+        //double bottom=-.25;        
         //for(int i=0;i<100;i++) {
         double vertInc = (top-bottom)/HEIGHT;
         double horzInc = (right-left)/WIDTH;
@@ -43,7 +59,7 @@ public class Initialize {
             }
             b=left;
             a-=vertInc;
-            //System.out.println((double)r/(double)HEIGHT*100);
+            System.out.println((double)r/(double)HEIGHT*100);
         }
         d.setPoints(points);
         d.setVisible(true);
@@ -53,10 +69,23 @@ public class Initialize {
         //bottom+=.01;
         //top-=.01;
         BufferedImage out = new BufferedImage(WIDTH,HEIGHT, BufferedImage.TYPE_INT_RGB);
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(new File("mandlebrot_render_raw.txt")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         for(double[] du : points) {
             try {
                 out.setRGB((int)du[0], (int)du[1], (d.getIterationColor((int)du[2])).getRGB());
             } catch (Exception e) {
+            }
+            try {
+                bw.write("loc:[" + du[0] + "," + du[1] + "] - value[" + du[2] + "]");
+                bw.newLine();
+                bw.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         File output = new File("mandlebrot_render.png");
@@ -65,6 +94,8 @@ public class Initialize {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        
         //}
     }
 }
