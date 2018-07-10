@@ -15,26 +15,26 @@ public class Initialize {
         //Display d = new Display();
         //frame.add(d);
         //d.setVisible(true);
-        int ITERATIONS = 10000; 
+        int ITERATIONS = 1000; 
         Display d = new Display(ITERATIONS);
         frame.add(d);
         d.setVisible(true);
         frame.repaint();
         frame.revalidate();
-        double[] center = new double[]{-.7463,.1102};
+        double[] center = new double[]{0,0};
         double zoom = 2;
-        double left = -2+center[0];
-        double right = 1+center[0];
-        double top = 1+center[1];
-        double bottom = -1+center[1];
-        //for(int i=1;i<zoom;i++) {
+        double left = -4+center[0];
+        double right = 4+center[0];
+        double top = 2+center[1];
+        double bottom = -2+center[1];
+        /*for(int i=1;i<zoom;i++) {
             double horzDist = right-left;
             double vertDist = top-bottom;
-            left+=horzDist/(2*zoom);
-            right-=horzDist/(2*zoom);
-            top-=vertDist/(2*zoom);
-            bottom+=vertDist/(2*zoom);
-        //}
+            left+=horzDist/2;
+            right-=horzDist/2;
+            top-=vertDist/2;
+            bottom+=vertDist/2;
+        }*/
         //double left=-1;
         //double right=0;
         //double top=1.25;
@@ -44,24 +44,36 @@ public class Initialize {
         double horzInc = (right-left)/WIDTH;
         double a = top;
         double b = left;
-        ArrayList<double[]> points = new ArrayList<double[]>();
-        //System.out.println("vertInc: " + vertInc);
-        //System.out.println("horzInc: " + horzInc);
-        for(int r=0;r<HEIGHT;r++) {
-            for(int c=0;c<WIDTH;c++) {
-                int calc = Calculate.iterations(new double[]{b,a}, ITERATIONS);
-                //System.out.println(a + " " + b);
-                points.add(new double[]{c,r,calc});
-                //d.draw();
-                b+=horzInc;
+        for(int i=1;i<=1000;i++) {
+            d.setMaxIterations(i);
+            ArrayList<double[]> points = new ArrayList<double[]>();
+            //System.out.println("vertInc: " + vertInc);
+            //System.out.println("horzInc: " + horzInc);
+            for(int r=0;r<HEIGHT;r++) {
+                for(int c=0;c<WIDTH;c++) {
+                    int calc = Calculate.iterations(new double[]{b,a}, i);
+                    //System.out.println(a + " " + b);
+                    points.add(new double[]{c,r,calc});
+                    //d.draw();
+                    b+=horzInc;
+                }
+                b=left;
+                a-=vertInc;
+                //System.out.println((((double)((int)(((double)r/(double)HEIGHT*100)*100)))/100) + "% complete with frame generation");
             }
-            b=left;
-            a-=vertInc;
-            System.out.println((((double)((int)(((double)r/(double)HEIGHT*100)*100)))/100) + "% complete with frame generation");
+            d.setPoints(points);
+            //d.setVisible(true);
+            d.draw();
+            a = top;
+            b = left;
+            //System.out.println("array size: " + points.size()); 
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        d.setPoints(points);
-        d.setVisible(true);
-        d.draw();
+        /*
         //left+=.02;
         //right-=.02;
         //bottom+=.01;
@@ -100,6 +112,6 @@ public class Initialize {
             System.out.println("image write failed with error:");
             e.printStackTrace();
         }
-        //}
+        //}*/
     }
 }

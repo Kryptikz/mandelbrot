@@ -73,4 +73,7 @@ public class Display extends JComponent {
             return (new Color(0,0,0));  
         return Color.BLACK;
     }
+    public void setMaxIterations(int m) {
+        maxit=m;
+    }
 }
