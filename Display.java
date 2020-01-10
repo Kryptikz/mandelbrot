@@ -4,6 +4,9 @@ import java.util.*;
 public class Display extends JComponent {
     ArrayList<double[]> points;
     int maxit;
+    int zoomscale = 7;
+    int width = 1920;
+    int height = 1080;
     public Display(int max) {
         points = new ArrayList<double[]>();
         maxit=max;
@@ -17,14 +20,18 @@ public class Display extends JComponent {
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.translate((double)(width/2),(double)(height/2));
+        g2d.scale(zoomscale,zoomscale);
+        g2d.translate(-(double)(width/2),-(double)(height/2));
         for(double[] d : points) {
             double x = d[0];
             double y = d[1];
             int i = (int)d[2];
             //i=i%18;
-            g.setColor(getIterationColor(i));
+            g2d.setColor(getIterationColor(i));
             //g.setColor(new Color((int)i,0,0));
-            g.fillRect((int)x, (int)y, 1, 1);
+            g2d.fillRect((int)x, (int)y, 1, 1);
         }
     }
     public void addPoint(double[] d) { 

@@ -27,6 +27,24 @@ public class Initialize {
         double right = 4+center[0];
         double top = 2+center[1];
         double bottom = -2+center[1];
+        d.setMaxIterations(50);
+        ArrayList<double[]> points = new ArrayList<double[]>();
+        double vertInc = (top-bottom)/HEIGHT;
+        double horzInc = (right-left)/WIDTH;
+        double a = top;
+        double b = left;
+        for(int r=0;r<HEIGHT;r++) {
+            for(int c=0;c<WIDTH;c++) {
+                int calc = Calculate.iterations(new double[]{b,a},50);
+                points.add(new double[]{c,r,calc});
+                b+=horzInc;
+            }
+            b=left;
+            a-=vertInc;
+        }
+        d.setPoints(points);
+        d.draw();
+        
         /*for(int i=1;i<zoom;i++) {
             double horzDist = right-left;
             double vertDist = top-bottom;
@@ -40,6 +58,7 @@ public class Initialize {
         //double top=1.25;
         //double bottom=-.25;        
         //for(int i=0;i<100;i++) {
+        /*
         double vertInc = (top-bottom)/HEIGHT;
         double horzInc = (right-left)/WIDTH;
         double a = top;
@@ -73,6 +92,7 @@ public class Initialize {
                 e.printStackTrace();
             }
         }
+        */
         /*
         //left+=.02;
         //right-=.02;
